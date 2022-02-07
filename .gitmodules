@@ -1,6 +1,6 @@
 [submodule "Front-End"]
 	path = Front-End
-	url = git@github.com:CS401-Team-Project/Front-End.git
+	url = https://www.github.com/CS401-Team-Project/Front-End.git
 [submodule "Back-End"]
 	path = Back-End
-	url = git@github.com:CS401-Team-Project/Back-End.git
+	url = https://www.github.com/CS401-Team-Project/Back-End.git
