@@ -14,5 +14,10 @@
 2. Install Docker-Compose: https://docs.docker.com/compose/install/
 
 ### Running the Server
-1. Build and run the server in the background as a daemon: `docker-compose up -d`.
-2. If changes are made to the Docker files, you will need to re-build the docker image: `docker-compose up --build`. 
+1. Build and run the server: 
+	- In the Foreground: `docker-compose up`
+	- As a Daemon: `docker-compose up -d`
+2. If changes are made to the Docker files, you will need to re-build the docker image: 
+	- Build only: `docker-compose --build`
+	- Build & start: `docker-compose up --build`
+	- Build & start as Daemon: `docker-compose up --build -d`
