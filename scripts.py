@@ -135,5 +135,3 @@ for i, (key, index) in enumerate(selected):
 
 print("=" * 80)
 print("Done!")
-# list_of_containers = docker.compose.ps()
-# print(list_of_containers)
