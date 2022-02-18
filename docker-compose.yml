@@ -1,6 +1,8 @@
 version: '3.7'
 services:
    client:
+      image: smart-ledger-client
+      container_name: smart-ledger-client
       build:
          context: ./Front-End
          dockerfile: Dockerfile
@@ -15,13 +17,13 @@ services:
 
    mongodb:
       image: mongo
-      container_name: mongo
+      container_name: smart-ledger-mongo
       restart: unless-stopped
       command: mongod --auth
       environment:
          MONGO_INITDB_ROOT_USERNAME: "admin"
          MONGO_INITDB_ROOT_PASSWORD: "password"
-         MONGO_INITDB_DATABASE: smart_ledger
+         MONGO_INITDB_DATABASE: smart-ledger
          MONGODB_DATA_DIR: /data/db
       volumes:
          - mongodbdata:/data/db
@@ -29,9 +31,16 @@ services:
          - backend
 
    api:
+      image: smart-ledger-api
+      container_name: smart-ledger-api
       build:
          context: ./Back-End
          dockerfile: Dockerfile
+         args:
+            MONGODB_HOST: mongodb
+            MONGODB_USERNAME: "apiuser"
+            MONGODB_PASSWORD: "apipassword"
+
       command: gunicorn --bind 0.0.0.0:5000 app:app
       ports:
          - "5000:5000"
