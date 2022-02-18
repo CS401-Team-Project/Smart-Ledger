@@ -1,3 +1,0 @@
-#/bin/bash
-git fetch --all --recurse-submodules
-git pull --recurse-submodules
