@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: .
+    destination: /home/ec2-user/app
+hooks:
+  AfterInstall:
+    - location: scripts/EC2/after_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/EC2/application_start.sh
+      timeout: 300
+      runas: root
