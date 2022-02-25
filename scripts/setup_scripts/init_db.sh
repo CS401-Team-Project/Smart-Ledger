@@ -10,3 +10,4 @@ docker exec -it smart-ledger-api bash -c "python db_scripts/create_api_user.py $
 
 echo "## Filling Database with data"
 docker exec -it smart-ledger-api bash -c "python db_scripts/fill_db.py"
+
