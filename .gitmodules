@@ -2,7 +2,9 @@
 	path = Front-End
 	url = https://github.com/CS401-Team-Project/Front-End.git
 	update = merge
+	branch = main
 [submodule "Back-End"]
 	path = Back-End
 	url = https://github.com/CS401-Team-Project/Back-End.git
 	update = merge
+	branch = main
