@@ -36,18 +36,12 @@ services:
       build:
          context: ./Back-End
          dockerfile: Dockerfile
-         args:
-            MONGODB_HOST: mongodb
-            MONGODB_USERNAME: "apiuser"
-            MONGODB_PASSWORD: "apipassword"
-
-      command: gunicorn --bind 0.0.0.0:5000 app:app
       ports:
          - "5000:5000"
       environment:
-         MONGODB_HOST: mongodb
-         MONGODB_USERNAME: "apiuser"
-         MONGODB_PASSWORD: "apipassword"
+         MONGO_HOST: mongodb
+         API_USERNAME: "apiuser"
+         API_PASSWORD: "apipassword"
       volumes:
          - appdata:/var/www/
       depends_on:
