@@ -18,8 +18,9 @@ jobs:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_KNOWN_HOSTS }}
           deployment_mode: docker-compose
-          copy_stack_file: false
+          copy_stack_file: true
           deploy_path: /root/deployment-test
+          stack_file_name: docker-compose.yml
           pull_images_first: true
           keep_files: 3
           args: up -d
