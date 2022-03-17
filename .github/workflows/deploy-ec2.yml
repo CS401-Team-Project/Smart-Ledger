@@ -7,10 +7,13 @@ on:
       - main
 
 jobs:
-  deploy:
-    name: Deploy to EC2 on master branch push
+  build:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
       - name: Docker Deployment
         uses: wshihadeh/docker-deployment-action@v1
         with:
