@@ -12,13 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Deployment
-        uses: wshihadeh/docker-deployment-action@v1
+        uses: wshihadeh/docker-deployment-action@master
         with:
           remote_docker_host: ubuntu@sl.absolutzero.org
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_KNOWN_HOSTS }}
           deployment_mode: docker-compose
-          docker_prune: 'true'
+          copy_stack_file: false
+          deploy_path: /root/deployment-test
+          stack_file_name: docker-compose.yml
+          pull_images_first: true
+          keep_files: 3
           args: up -d
           
 #       # Step 2: Add SSH credentials to your GitHub CI/CD instance
