@@ -11,17 +11,17 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - name: Docker Deployment
-        uses: wshihadeh/docker-deployment-action@v1
+        uses: wshihadeh/docker-deployment-action@master
         with:
           remote_docker_host: ubuntu@sl.absolutzero.org
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.SSH_KNOWN_HOSTS }}
           deployment_mode: docker-compose
-          copy_stack_file: false
+          copy_stack_file: true
           deploy_path: /home/ubuntu/smart-ledger
           stack_file_name: docker-compose.yml
           pull_images_first: true
