@@ -27,7 +27,7 @@ jobs:
           stack_file_name: docker-compose.yml
           pull_images_first: true
           keep_files: 3
-          args: up -d
+          args: --verbose up -d
           
 #       # Step 2: Add SSH credentials to your GitHub CI/CD instance
 #       - name: Add SSH Credentials
