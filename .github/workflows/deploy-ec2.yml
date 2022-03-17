@@ -20,7 +20,6 @@ jobs:
           deployment_mode: docker-compose
           copy_stack_file: false
           deploy_path: /root/deployment-test
-          stack_file_name: docker-compose.yml
           pull_images_first: true
           keep_files: 3
           args: up -d
