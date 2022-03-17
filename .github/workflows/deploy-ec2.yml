@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Deployment
-        uses: wshihadeh/docker-deployment-action@master
+        uses: wshihadeh/docker-deployment-action@v1
         with:
           remote_docker_host: ubuntu@sl.absolutzero.org
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
