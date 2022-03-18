@@ -13,7 +13,9 @@ services:
          - ./Front-End:/app
       networks:
          - frontend
-
+      environment:
+         - CHOKIDAR_USEPOLLING=true
+   
    mongodb:
       image: mongo
       container_name: smart-ledger-mongo
