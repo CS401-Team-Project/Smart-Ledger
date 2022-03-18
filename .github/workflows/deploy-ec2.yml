@@ -18,4 +18,4 @@ jobs:
 #            sudo ./deploy.sh
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
-          key: ${{ secrets.PRIVATE_KEY}}
+          key: ${{ secrets.SSH_PRIVATE_KEY}}
