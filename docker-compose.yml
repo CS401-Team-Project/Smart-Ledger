@@ -11,6 +11,7 @@ services:
          - "3000:3000"
       volumes:
          - ./Front-End:/app
+         - node_modules:/app/node_modules
       networks:
          - frontend
       environment:
@@ -65,4 +66,6 @@ volumes:
    mongodbdata:
       driver: local
    appdata:
+      driver: local
+   node_modules:
       driver: local
