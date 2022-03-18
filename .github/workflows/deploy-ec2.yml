@@ -14,8 +14,7 @@ jobs:
         with:
           command: |
             cd ${{ secrets.REPO_PATH }}
-            ls
-#            sudo ./deploy.sh
+            sudo ./deploy.sh > deploy.log
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY}}

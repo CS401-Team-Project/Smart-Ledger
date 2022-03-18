@@ -31,10 +31,29 @@ echo "# CONTAINERS"
 docker ps
 
 echo
-echo "# GIT"
-git reset --hard HEAD
-git clean -f
+echo "# GIT Config"
+git config --global submodule.recurse true
+git config --global status.submoduleSummary true
+
+echo
+echo "# GIT Status"
+git status
+
+echo
+echo "# GIT Clean Reset"
+git clean -xfd
+git submodule foreach --recursive git clean -xfd
+git reset --hard
+git submodule foreach --recursive git reset --hard
+git submodule update --init --recursive
+
+echo
+echo "# GIT Pull"
 git pull
+
+echo
+echo "# GIT Status"
+git status
 
 echo
 echo "# UP..."
