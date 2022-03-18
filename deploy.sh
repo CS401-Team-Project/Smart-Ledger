@@ -31,6 +31,12 @@ echo "# CONTAINERS"
 docker ps
 
 echo
+echo "# GIT"
+git reset --hard HEAD
+git clean -f
+git pull
+
+echo
 echo "# UP..."
 docker-compose up -d
 
