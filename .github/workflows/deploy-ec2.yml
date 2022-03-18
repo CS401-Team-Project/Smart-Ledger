@@ -13,7 +13,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd ${{ secrets.REPO_PATH }}
+            cd ${{ secrets.REPO_PATH }} &&
             sudo ./deploy.sh
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
