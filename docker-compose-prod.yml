@@ -3,7 +3,7 @@ services:
 
     mongodb:
         image: mongo
-        container_name: smart_ledger_mongo
+        container_name: sl-mongo
         restart: unless-stopped
         command: mongod --auth
         environment:
@@ -17,8 +17,8 @@ services:
             - backend
 
     api:
-        image: smart_ledger_api
-        container_name: smart_ledger_api
+        image: sl-api
+        container_name: sl-api
         build:
             context: ./Back-End
             dockerfile: Dockerfile
@@ -37,8 +37,8 @@ services:
             - backend
 
     client:
-        image: smart_ledger_client
-        container_name: smart_ledger_client
+        image: sl-client
+        container_name: sl-client
         build:
             context: ./Front-End
             dockerfile: Dockerfile-prod
