@@ -66,8 +66,20 @@ git submodule foreach "git checkout <branch>"
 
 ### 4. Deployment
 
-#### 1. **RECOMMENDED**: Use the [Python script](./scripts.py) `script.py`:
+### 4.1. Production:
+- Uses NGINX reverse proxy to serve static files from the Front-End submodule.
+- Front-End - `http://127.0.0.1`
+- Back-End (API) - `http://127.0.0.1/api`
+- Compose file: `docker-compose-prod.yml`
+  - Ex: `docker-compose -f docker-compose-prod.yml up --build ` 
 
+### 4.2. Development:
+- Doesn't use NGINX reverse proxy.
+- Front-End - `http://127.0.0.1:3000`
+- Back-End (API) - `http://127.0.0.1:5000`
+- Compose file: `docker-compose.yml`
+
+#### [Helper script](./scripts.py) `scripts.py`:
 - Provides a user-friendly interface to perform a sequence of docker-compose commands.
 	1. **_Stop and Remove Containers_**
 		- _Optionally remove all images, volumes, and orphans._
@@ -78,7 +90,7 @@ git submodule foreach "git checkout <branch>"
 - Use Space to select 1 or more options, and Enter to confirm.
 - Install the module [requirements](./requirements.txt): `pip install -r requirements.txt`
 
-#### 2. **MANUAL**:
+### 4.3. Useful Docker Commands:
 
 1. Build and run the containers:
 	- Normal: `docker-compose up`

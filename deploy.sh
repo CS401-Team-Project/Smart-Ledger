@@ -1,124 +1,131 @@
 #!/bin/bash
 
-function cleanreset () {
-	echo "====================================================================="
-	echo "====================================================================="
-	echo "# GIT Config"
-	git config --global submodule.recurse true
-	git config --global status.submoduleSummary true
+function sep1() {
+  echo "====================================================================="
+}
 
-	echo "====================================================================="
-	echo "# GIT Status"
-	git status
+function sep2() {
+  sep2
+}
 
-	echo "====================================================================="
-	echo "# GIT Clean Reset"
-	git clean -xfd
-	git submodule foreach --recursive git clean -xfd
-	git reset --hard
-	git submodule foreach --recursive git reset --hard
-	git submodule update --init --recursive
+function cleanreset() {
+  sep1
+  sep1
+  echo "# GIT Config"
+  git config --global submodule.recurse true
+  git config --global status.submoduleSummary true
 
-	echo "====================================================================="
-	echo "# GIT Checkout Main"
-	git checkout main
+  sep1
+  echo "# GIT Status"
+  git status
 
-	echo "====================================================================="
-	echo "# GIT Pull"
-	git pull
+  sep1
+  echo "# GIT Clean Reset"
+  git clean -xfd
+  git submodule foreach --recursive git clean -xfd
+  git reset --hard
+  git submodule foreach --recursive git reset --hard
+  git submodule update --init --recursive
 
-	echo "====================================================================="
-	echo "# GIT Status"
-	git status
+  sep1
+  echo "# GIT Checkout Main"
+  git checkout main
 
-	echo
-	echo "====================================================================="
-	echo "====================================================================="
+  sep1
+  echo "# GIT Pull"
+  git pull
+
+  sep1
+  echo "# GIT Status"
+  git status
+
+  sep1
+  sep1
 }
 
 if [ "$1" == "clean-reset" ]; then
-	cleanreset
-	exit 0
+  cleanreset
+  exit 0
 else
-	if [ ! -z "$1" ]; then
-		BRANCH=$1
-		echo "====================================================================="
-		echo "====================================================================="
-		set +v
-		echo "# Front-End Checkout: $BRANCH"
-		cd Front-End && git status && git checkout "$BRANCH" || exit 1
-		echo "# Front-End Pull: $BRANCH"
-		git pull && git status && cd .. || exit 1
+  if [ ! -z "$1" ]; then
+    BRANCH=$1
+    sep1
+    sep1
+    set +v
+    echo "# Front-End Checkout: $BRANCH"
+    cd Front-End && git status && git checkout "$BRANCH" || exit 1
+    echo "# Front-End Pull: $BRANCH"
+    git pull && git status && cd .. || exit 1
 
-		echo "# Back-End Checkout: $BRANCH"
-		cd Back-End && git status && git checkout "$BRANCH" || exit 1
-		echo "# Back-End Pull: $BRANCH"
-		git pull && git status && cd .. || exit 1
+    echo "# Back-End Checkout: $BRANCH"
+    cd Back-End && git status && git checkout "$BRANCH" || exit 1
+    echo "# Back-End Pull: $BRANCH"
+    git pull && git status && cd .. || exit 1
 
-		echo "# GIT Add Front-End & Back-End"
-		git add Front-End && git add Back-End || exit 1
+    echo "# GIT Add Front-End & Back-End"
+    git add Front-End && git add Back-End || exit 1
 
-		echo "# GIT Push"
-		git commit -m "Deploy to EC2: $BRANCH" && git push || exit 1
-		set -v
-		echo "====================================================================="
-		echo "====================================================================="
-		exit 0
-	fi
+    echo "# GIT Push"
+    git commit -m "Deploy to EC2: $BRANCH" && git push || exit 1
+    set -v
+    sep1
+    sep1
+    exit 0
+  fi
 fi
 
-function currstate () {
-	echo "====================================================================="
-	echo "====================================================================="
-	echo "# DISK USAGE"
-	docker system df
+function currstate() {
+  sep1
+  sep1
+  echo "# DISK USAGE"
+  docker system df
 
-	echo "---------------------------------------------------------------------"
-	echo "# CONTAINERS"
-	docker container ls
+  sep2
+  echo "# CONTAINERS"
+  docker container ls
 
-	echo "---------------------------------------------------------------------"
-	echo "# IMAGE"
-	docker image ls
+  sep2
+  echo "# IMAGE"
+  docker image ls
 
-	echo "---------------------------------------------------------------------"
-	echo "# VOLUMES"
-	docker volume ls
+  sep2
+  echo "# VOLUMES"
+  docker volume ls
 
-	echo "---------------------------------------------------------------------"
-	echo "# NETWORKS"
-	docker network ls
+  sep2
+  echo "# NETWORKS"
+  docker network ls
 
-	echo "---------------------------------------------------------------------"
-	echo "# CONTAINERS"
-	docker ps
+  sep2
+  echo "# CONTAINERS"
+  docker ps
 
-	echo "====================================================================="
-	echo "====================================================================="
+  sep1
+  sep1
 }
 
 currstate
 
 echo
-echo "====================================================================="
-echo "====================================================================="
+sep1
+sep1
 echo "# DOWN..."
 docker-compose down --rmi=all --volumes --remove-orphans
-
-echo "---------------------------------------------------------------------"
+sep2
 echo "# PRUNE..."
 docker system prune -af
-echo "====================================================================="
-echo "====================================================================="
+sep1
+sep1
 echo
 
 currstate
 
 echo
-echo "====================================================================="
-echo "====================================================================="
+sep1
+sep1
 echo "# UP..."
-docker-compose up -d || exit 1
-echo "====================================================================="
-echo "====================================================================="
+docker-compose -f docker-compose-prod.yml up -d || exit 1
+sep1
+sep1
+
 currstate
