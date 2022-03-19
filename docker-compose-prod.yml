@@ -54,6 +54,7 @@ services:
             - CHOKIDAR_USEPOLLING=true
         depends_on:
             - api
+
 networks:
     frontend:
         driver: bridge
