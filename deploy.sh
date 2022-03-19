@@ -124,7 +124,7 @@ echo
 sep1
 sep1
 echo "# UP..."
-docker-compose up -d || exit 1
+docker-compose -f docker-compose-prod.yml up -d || exit 1
 sep1
 sep1
 
