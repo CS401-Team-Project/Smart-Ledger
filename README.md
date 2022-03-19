@@ -1,5 +1,9 @@
 # Smart-Ledger
 
+[![AWS-Deployed](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml/badge.svg)](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml)
+[![FE-Build](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml/badge.svg)](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml)
+[![BE-Pylint](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml/badge.svg)](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml)
+
 ### 1. Requirements
 
 1. Install Docker: https://docs.docker.com/get-docker/
@@ -77,9 +81,20 @@ git submodule foreach "git checkout <branch>"
 #### 2. **MANUAL**:
 
 1. Build and run the containers:
-	- In the Foreground: `docker-compose up`
-	- As a Daemon: `docker-compose up -d`
+	- Normal: `docker-compose up`
+	- Detached: `docker-compose up -d`
+	- More info: https://docs.docker.com/compose/reference/up/
 2. If changes are made to the Docker files, you will need to re-build the docker image:
-	- Build only: `docker-compose --build`
-	- Build & start: `docker-compose up --build`
-	- Build & start as Daemon: `docker-compose up --build -d`
+	- Build only: `docker-compose build`
+	- Up + rebuild: `docker-compose up --build`
+	- Up detached + rebuild: `docker-compose up --build -d`
+3. Stop and remove containers and networks for services defined in the Compose file:
+	2. `docker-compose down`
+	3. Optionally remove images, volumes, and orphans:
+		1. Arguments: `--rmi all`, `-v`, `--remove-orphans`
+	4. More info: https://docs.docker.com/compose/reference/down/
+4. View running containers: `docker-compose ps`
+5. Drop into a shell: `docker-compose exec -it <container_name> bash`
+6. View logs:
+	1. All: `docker-compose logs`
+	2. Specific container: `docker-compose logs <container_name>`

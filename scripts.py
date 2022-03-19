@@ -86,13 +86,13 @@ def down():
             "remove_orphans": True
         }}
 
-    selected, _ = pick.pick(list(options.keys()), title, indicator='+', multiselect=True)
+    selected = pick.pick(list(options.keys()), title, indicator='+', multiselect=True)
 
     if len(selected) == 0:
         docker.compose.down()
     else:
         args = {}
-        for option in selected:
+        for option, _ in selected:
             args.update(options[option])
         print(args)
         docker.compose.down(**args)
@@ -152,13 +152,13 @@ def main():
     title += "\n"
     title += "What would you like to do? (Use Space to select 1 or more)"
 
-    selected, _ = pick.pick(list(options.keys()), title, indicator='*', multiselect=True)
+    selected = pick.pick(list(options.keys()), title, indicator='*', multiselect=True)
 
     print("=" * 80)
     if len(selected) == 0:
         print("Nothing selected")
 
-    for i, key in enumerate(selected):
+    for i, (key, _) in enumerate(selected):
         if i != 0:
             print("-" * 60)
 
