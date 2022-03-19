@@ -1,7 +1,49 @@
 #!/bin/bash
-BRANCH=$1
 
-if [ ! -z "$BRANCH" ]; then
+function cleanreset () {
+	echo
+	echo "====================================================================="
+	echo "# GIT Config"
+	git config --global submodule.recurse true
+	git config --global status.submoduleSummary true
+
+	echo
+	echo "====================================================================="
+	echo "# GIT Status"
+	git status
+
+	echo
+	echo "====================================================================="
+	echo "# GIT Clean Reset"
+	git clean -xfd
+	git submodule foreach --recursive git clean -xfd
+	git reset --hard
+	git submodule foreach --recursive git reset --hard
+	git submodule update --init --recursive
+
+	echo
+	echo "====================================================================="
+	echo "# GIT Checkout Main"
+	git checkout main
+
+	echo
+	echo "====================================================================="
+	echo "# GIT Pull"
+	git pull
+
+	echo
+	echo "====================================================================="
+	echo "# GIT Status"
+	git status
+}
+
+if [ "$1" == "clean-reset" ]; then
+	cleanreset
+	exit 0
+fi
+
+if [ ! -z "$1" ]; then
+	BRANCH=$1
 	set +v
 	echo "# Front-End Checkout: $BRANCH"
 	cd Front-End && git checkout "$BRANCH" || exit 1
@@ -55,6 +97,7 @@ function currstate () {
 	echo "====================================================================="
 }
 
+
 echo "====================================================================="
 currstate
 
@@ -71,40 +114,6 @@ docker system prune -af
 echo "====================================================================="
 currstate
 
-echo
-echo "====================================================================="
-echo "# GIT Config"
-git config --global submodule.recurse true
-git config --global status.submoduleSummary true
-
-echo
-echo "====================================================================="
-echo "# GIT Status"
-git status
-
-echo
-echo "====================================================================="
-echo "# GIT Clean Reset"
-git clean -xfd
-git submodule foreach --recursive git clean -xfd
-git reset --hard
-git submodule foreach --recursive git reset --hard
-git submodule update --init --recursive
-
-echo
-echo "====================================================================="
-echo "# GIT Checkout Main"
-git checkout main
-
-echo
-echo "====================================================================="
-echo "# GIT Pull"
-git pull
-
-echo
-echo "====================================================================="
-echo "# GIT Status"
-git status
 
 echo
 echo "====================================================================="

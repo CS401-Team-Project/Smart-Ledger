@@ -14,9 +14,7 @@ jobs:
         with:
           command: |
             cd /opt/Smart-Ledger &&
-            git reset --hard HEAD &&
-            git checkout main &&
-            git pull &&
+            sudo ./deploy.sh clean-reset
             sudo ./deploy.sh
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
