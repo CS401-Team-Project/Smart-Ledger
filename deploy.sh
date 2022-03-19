@@ -103,5 +103,6 @@ echo
 echo "====================================================================="
 echo "# UP..."
 docker-compose up -d
+docker volume prune -af
 
 currstate
