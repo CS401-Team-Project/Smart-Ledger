@@ -102,7 +102,11 @@ git status
 echo
 echo "====================================================================="
 echo "# UP..."
-docker-compose up -d
+docker-compose up -d || exit 1
+
+echo
+echo "====================================================================="
+echo "# Volume Prune"
 docker volume prune -af
 
 currstate
