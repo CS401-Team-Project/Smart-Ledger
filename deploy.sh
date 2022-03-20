@@ -43,17 +43,17 @@ function currstate() {
 function cleanreset() {
   sep1
   sep1
-  echo "# GIT Config"
+  echo "# GIT CONFIG"
   git config --global submodule.recurse true
   git config --global status.submoduleSummary true
   git config --global diff.submodule diff
 
   sep1
-  echo "# GIT Status"
+  echo "# GIT STATUS"
   git status
 
   sep1
-  echo "# GIT Clean Reset"
+  echo "# GIT CLEAN RESET"
   git clean -xfd
   git submodule foreach --recursive git clean -xfd
   git reset --hard
@@ -61,15 +61,15 @@ function cleanreset() {
   git submodule update --init --recursive
 
   sep1
-  echo "# GIT Checkout Main"
+  echo "# GIT CHECKOUT MAIN"
   git checkout main
 
   sep1
-  echo "# GIT Pull"
+  echo "# GIT PULL"
   git pull
 
   sep1
-  echo "# GIT Status"
+  echo "# GIT STATUS"
   git status
 
   sep1
@@ -94,6 +94,8 @@ fi
 currstate
 
 echo ""
+echo ""
+
 sep1
 sep1
 echo "# DOWN..."
@@ -103,10 +105,13 @@ echo "# PRUNE..."
 docker system prune -af
 sep1
 sep1
+
+echo ""
 echo ""
 
 currstate
 
+echo ""
 echo ""
 
 sep1
@@ -115,5 +120,8 @@ echo "# UP..."
 docker-compose -f docker-compose-prod.yml up -d || exit 1
 sep1
 sep1
+
+echo ""
+echo ""
 
 currstate
