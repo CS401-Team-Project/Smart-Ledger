@@ -1,5 +1,9 @@
 # Smart-Ledger
 
+[![AWS-Deployed](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml/badge.svg)](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml)
+[![FE-Build](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml/badge.svg)](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml)
+[![BE-Pylint](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml/badge.svg)](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml)
+
 ### 1. Requirements
 
 1. Install Docker: https://docs.docker.com/get-docker/
@@ -62,8 +66,20 @@ git submodule foreach "git checkout <branch>"
 
 ### 4. Deployment
 
-#### 1. **RECOMMENDED**: Use the [Python script](./scripts.py) `script.py`:
+### 4.1. Production:
+- Uses NGINX reverse proxy to serve static files from the Front-End submodule.
+- Front-End - `http://127.0.0.1`
+- Back-End (API) - `http://127.0.0.1/api`
+- Compose file: `docker-compose-prod.yml`
+  - Ex: `docker-compose -f docker-compose-prod.yml up --build ` 
 
+### 4.2. Development:
+- Doesn't use NGINX reverse proxy.
+- Front-End - `http://127.0.0.1:3000`
+- Back-End (API) - `http://127.0.0.1:5000`
+- Compose file: `docker-compose.yml`
+
+#### [Helper script](./scripts.py) `scripts.py`:
 - Provides a user-friendly interface to perform a sequence of docker-compose commands.
 	1. **_Stop and Remove Containers_**
 		- _Optionally remove all images, volumes, and orphans._
@@ -74,12 +90,23 @@ git submodule foreach "git checkout <branch>"
 - Use Space to select 1 or more options, and Enter to confirm.
 - Install the module [requirements](./requirements.txt): `pip install -r requirements.txt`
 
-#### 2. **MANUAL**:
+### 4.3. Useful Docker Commands:
 
 1. Build and run the containers:
-	- In the Foreground: `docker-compose up`
-	- As a Daemon: `docker-compose up -d`
+	- Normal: `docker-compose up`
+	- Detached: `docker-compose up -d`
+	- More info: https://docs.docker.com/compose/reference/up/
 2. If changes are made to the Docker files, you will need to re-build the docker image:
-	- Build only: `docker-compose --build`
-	- Build & start: `docker-compose up --build`
-	- Build & start as Daemon: `docker-compose up --build -d`
+	- Build only: `docker-compose build`
+	- Up + rebuild: `docker-compose up --build`
+	- Up detached + rebuild: `docker-compose up --build -d`
+3. Stop and remove containers and networks for services defined in the Compose file:
+	2. `docker-compose down`
+	3. Optionally remove images, volumes, and orphans:
+		1. Arguments: `--rmi all`, `-v`, `--remove-orphans`
+	4. More info: https://docs.docker.com/compose/reference/down/
+4. View running containers: `docker-compose ps`
+5. Drop into a shell: `docker-compose exec -it <container_name> bash`
+6. View logs:
+	1. All: `docker-compose logs`
+	2. Specific container: `docker-compose logs <container_name>`
