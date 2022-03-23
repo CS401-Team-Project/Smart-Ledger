@@ -10,7 +10,7 @@ Options:
 """
 import pick
 from python_on_whales import docker
-
+from functools import partial
 
 def print_containers():
     """
@@ -114,11 +114,28 @@ def up_detached():
     docker.compose.up(detach=True)
 
 
+def rebuild_restart(service_name):
+    """
+    Rebuild and restart a service
+    """
+    print(f"Rebuild and restart service: {service_name}")
+    docker.compose.build([service_name])
+    docker.compose.restart([service_name])
+
+
+def prune():
+    """
+    Prune docker
+    """
+    print("Prune docker")
+    docker.system.prune(all=True, volumes=True)
+
+
 def print_logs():
     """
     Print logs of the containers as a stream
     """
-    docker.compose.logs(stream=True)
+    docker.compose.logs()
 
 
 def main():
@@ -127,10 +144,11 @@ def main():
     """
     options = {
         "Stop and Remove Containers": down,
-        "Build/Rebuild": build,
-        "Create Containers & Start": up_detached,
-        "Print Logs": print_logs,
-        "Inspect Containers": print_containers
+        "Build/Rebuild All Images": build,
+        "Start All Containers": up_detached,
+        "Inspect Containers": print_containers,
+        "Logs": print_logs,
+        "Prune": prune,
     }
 
     if docker.compose.is_installed():
@@ -141,10 +159,32 @@ def main():
 
     running_serv = docker.compose.ps()
     if len(running_serv) > 0:
-        title += 'Current Containers:\n'
+        title += 'CONTAINERS:\n'
         for container in running_serv:
             exit_code = f" {container.state.exit_code}" if container.state.status == 'exited' else ''
             title += f"  [{container.state.status.upper()}{exit_code}] \"{container.name}\"\n"
+
+        for service in docker.compose.config().services:
+            options[f"Rebuild & Restart {service.upper()}"] = partial(rebuild_restart, service)
+
+        df = docker.system.disk_free()
+        title += "DISK USAGE:\n" + \
+                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.images.active,
+                                                                               "Images",
+                                                                               round(df.images.size * 1e-6, 2),
+                                                                               round(df.images.reclaimable * 1e-6, 2)) + \
+                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.containers.active,
+                                                                               "Containers",
+                                                                               round(df.containers.size * 1e-6, 2),
+                                                                               round(df.containers.reclaimable * 1e-6, 2)) + \
+                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.volumes.active,
+                                                                               "Volumes",
+                                                                               round(df.volumes.size * 1e-6, 2),
+                                                                               round(df.volumes.reclaimable * 1e-6, 2)) + \
+                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.build_cache.active,
+                                                                               "Build Caches",
+                                                                               round(df.build_cache.size * 1e-6, 2),
+                                                                               round(df.build_cache.reclaimable * 1e-6, 2))
 
     else:
         title += "No Containers\n"
