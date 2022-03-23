@@ -8,9 +8,9 @@ Options:
 4. Print Logs
 5. Inspect Containers
 """
+from functools import partial
 from python_on_whales import docker
 import pick
-from functools import partial
 
 
 def print_containers():
