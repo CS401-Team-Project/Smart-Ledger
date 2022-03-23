@@ -9,8 +9,9 @@ Options:
 5. Inspect Containers
 """
 import pick
-from python_on_whales import docker
 from functools import partial
+from python_on_whales import docker
+
 
 def print_containers():
     """
@@ -138,6 +139,28 @@ def print_logs():
     docker.compose.logs()
 
 
+def get_disk_usage():
+    """
+    Get disk usage of the containers
+    """
+    d_f = docker.system.disk_free()
+
+    d_u = "DISK USAGE:\n"
+    d_u += f"  {d_f.images.active:<2} {'Images':<12} {round(d_f.images.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.images.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.containers.active:<2} {'Containers':<12} {round(d_f.containers.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.containers.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.volumes.active:<2} {'Volumes':<12} {round(d_f.volumes.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.volumes.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.build_cache.active:<2} {'Build Caches':<12} {round(d_f.build_cache.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.build_cache.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    return d_u
+
+
 def main():
     """
     Main function
@@ -167,24 +190,7 @@ def main():
         for service in docker.compose.config().services:
             options[f"Rebuild & Restart {service.upper()}"] = partial(rebuild_restart, service)
 
-        df = docker.system.disk_free()
-        title += "DISK USAGE:\n" + \
-                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.images.active,
-                                                                               "Images",
-                                                                               round(df.images.size * 1e-6, 2),
-                                                                               round(df.images.reclaimable * 1e-6, 2)) + \
-                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.containers.active,
-                                                                               "Containers",
-                                                                               round(df.containers.size * 1e-6, 2),
-                                                                               round(df.containers.reclaimable * 1e-6, 2)) + \
-                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.volumes.active,
-                                                                               "Volumes",
-                                                                               round(df.volumes.size * 1e-6, 2),
-                                                                               round(df.volumes.reclaimable * 1e-6, 2)) + \
-                 "  {0:<2} {1:<12} {2: >8} MB {3: >6} MB Reclaimable\n".format(df.build_cache.active,
-                                                                               "Build Caches",
-                                                                               round(df.build_cache.size * 1e-6, 2),
-                                                                               round(df.build_cache.reclaimable * 1e-6, 2))
+        title += get_disk_usage()
 
     else:
         title += "No Containers\n"
