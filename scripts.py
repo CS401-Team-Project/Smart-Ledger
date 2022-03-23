@@ -8,8 +8,9 @@ Options:
 4. Print Logs
 5. Inspect Containers
 """
-import pick
+from functools import partial
 from python_on_whales import docker
+import pick
 
 
 def print_containers():
@@ -114,11 +115,50 @@ def up_detached():
     docker.compose.up(detach=True)
 
 
+def rebuild_restart(service_name):
+    """
+    Rebuild and restart a service
+    """
+    print(f"Rebuild and restart service: {service_name}")
+    docker.compose.build([service_name])
+    docker.compose.restart([service_name])
+
+
+def prune():
+    """
+    Prune docker
+    """
+    print("Prune docker")
+    docker.system.prune(all=True, volumes=True)
+
+
 def print_logs():
     """
     Print logs of the containers as a stream
     """
-    docker.compose.logs(stream=True)
+    docker.compose.logs()
+
+
+def get_disk_usage():
+    """
+    Get disk usage of the containers
+    """
+    d_f = docker.system.disk_free()
+
+    d_u = "DISK USAGE:\n"
+    d_u += f"  {d_f.images.active:<2} {'Images':<12} {round(d_f.images.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.images.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.containers.active:<2} {'Containers':<12} {round(d_f.containers.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.containers.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.volumes.active:<2} {'Volumes':<12} {round(d_f.volumes.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.volumes.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    d_u += f"  {d_f.build_cache.active:<2} {'Build Caches':<12} {round(d_f.build_cache.size * 1e-6, 2): >8} MB " \
+           f"{round(d_f.build_cache.reclaimable * 1e-6, 2): >6} MB Reclaimable\n"
+
+    return d_u
 
 
 def main():
@@ -127,10 +167,11 @@ def main():
     """
     options = {
         "Stop and Remove Containers": down,
-        "Build/Rebuild": build,
-        "Create Containers & Start": up_detached,
-        "Print Logs": print_logs,
-        "Inspect Containers": print_containers
+        "Build/Rebuild All Images": build,
+        "Start All Containers": up_detached,
+        "Inspect Containers": print_containers,
+        "Logs": print_logs,
+        "Prune": prune,
     }
 
     if docker.compose.is_installed():
@@ -141,10 +182,15 @@ def main():
 
     running_serv = docker.compose.ps()
     if len(running_serv) > 0:
-        title += 'Current Containers:\n'
+        title += 'CONTAINERS:\n'
         for container in running_serv:
             exit_code = f" {container.state.exit_code}" if container.state.status == 'exited' else ''
             title += f"  [{container.state.status.upper()}{exit_code}] \"{container.name}\"\n"
+
+        for service in docker.compose.config().services:
+            options[f"Rebuild & Restart {service.upper()}"] = partial(rebuild_restart, service)
+
+        title += get_disk_usage()
 
     else:
         title += "No Containers\n"
@@ -152,7 +198,7 @@ def main():
     title += "\n"
     title += "What would you like to do? (Use Space to select 1 or more)"
 
-    selected = pick.pick(list(options.keys()), title, indicator='*', multiselect=True)
+    selected = pick.pick(list(options.keys()), title, indicator='*', multiselect=True, min_selection_count=1)
 
     print("=" * 80)
     if len(selected) == 0:
