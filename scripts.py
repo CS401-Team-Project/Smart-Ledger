@@ -192,7 +192,7 @@ def main():
     title += "\n"
     title += "What would you like to do? (Use Space to select 1 or more)"
 
-    selected = pick.pick(list(options.keys()), title, indicator='*', multiselect=True)
+    selected = pick.pick(list(options.keys()), title, indicator='*', multiselect=True, min_selection_count=1)
 
     print("=" * 80)
     if len(selected) == 0:
