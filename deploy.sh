@@ -102,7 +102,7 @@ echo "# DOWN..."
 docker-compose down --rmi=all --volumes --remove-orphans
 sep2
 echo "# PRUNE..."
-docker system prune -af
+docker system prune -all --volumes --force
 sep1
 sep1
 
@@ -117,7 +117,7 @@ echo ""
 sep1
 sep1
 echo "# UP..."
-docker-compose -f docker-compose-prod.yml up -d || exit 1
+docker-compose -f docker-compose.production.yml up -d || exit 1
 sep1
 sep1
 
