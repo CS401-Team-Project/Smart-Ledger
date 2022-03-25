@@ -1,13 +1,14 @@
 version: '3.7'
 services:
 
+    mongodb:
+        container_name: sl-mongo
     api:
         container_name: sl-api
         build:
             context: ./Back-End
         environment:
             DEBUG: "false"
-
     client:
         container_name: sl-client
         build:
