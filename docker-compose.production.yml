@@ -2,6 +2,7 @@ version: '3.7'
 services:
 
     mongodb:
+        image: mongo
         container_name: sl-mongo
     api:
         container_name: sl-api
