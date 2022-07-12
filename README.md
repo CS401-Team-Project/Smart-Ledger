@@ -1,9 +1,5 @@
 # Smart-Ledger
 
-[![AWS-Deployed](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml/badge.svg)](https://github.com/CS401-Team-Project/Smart-Ledger/actions/workflows/deploy-ec2.yml)
-[![FE-Build](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml/badge.svg)](https://github.com/CS401-Team-Project/Front-End/actions/workflows/node.yml)
-[![BE-Pylint](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml/badge.svg)](https://github.com/CS401-Team-Project/Back-End/actions/workflows/pylint.yml)
-
 ### 1. Requirements
 
 1. Install Docker: https://docs.docker.com/get-docker/
